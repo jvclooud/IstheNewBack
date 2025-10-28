@@ -9,7 +9,7 @@ const rotas = Router()
 
 rotas.post('/adicionarUsuario',usuariosController.adicionar)
 rotas.post('/login',usuariosController.login)
-rotas.get('/produtos',produtosController.listar)
+rotas.get('/albuns',produtosController.listar)
 
 
 export default rotas
