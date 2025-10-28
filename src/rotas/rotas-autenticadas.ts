@@ -1,10 +1,10 @@
 import {Router} from 'express'
 
 import carrinhoController from '../carrinho/carrinho.controller.js'
-import produtosController from '../produtos/produtos.controller.js'
+import albunsController from '../albuns/albuns.controller.js'
 
 const rotas = Router()
-rotas.post('/produtos',produtosController.adicionar)
+rotas.post('/albuns',albunsController.adicionar)
 
 
 rotas.post('/adicionarItem',carrinhoController.adicionarItem)
