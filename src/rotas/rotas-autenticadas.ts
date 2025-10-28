@@ -5,7 +5,7 @@ import albunsController from '../albuns/albuns.controller.js'
 
 const rotas = Router()
 rotas.post('/albuns',albunsController.adicionar)
-
+rotas.get('/cadastro',albunsController.listar)
 
 rotas.post('/adicionarItem',carrinhoController.adicionarItem)
 rotas.post('/removerItem',carrinhoController.removerItem)

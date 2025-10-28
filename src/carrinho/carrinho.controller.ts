@@ -31,22 +31,30 @@ class CarrinhoController {
         console.log("Chegou na rota de adicionar item ao carrinho");
         const { albunsId, quantidade } = req.body; // albunsId é o _id do álbum
 
-        // 1. Validar usuário
+        // 1. Validar usuário (Pode ser 401, OK)
         if (!req.usuarioId) {
             return res.status(401).json({ mensagem: "Usuário inválido!" });
         }
         const usuarioId = req.usuarioId;
 
-        // 2. Validar quantidade
+        // 2. VALIDAR CAMPOS OBRIGATÓRIOS DO BODY (Nova adição ou move para antes do 401 se for o desejado)
+        if (!albunsId) {
+            return res.status(400).json({ mensagem: "albunsId (ID do álbum) é obrigatório." });
+        }
+        if (quantidade === undefined || quantidade === null) { // Checa se quantidade existe
+            return res.status(400).json({ mensagem: "Quantidade é obrigatória." });
+        }
+
+        // 3. Validar quantidade (o seu código já faz isso, mas está na posição 2)
         const qtdNum = Number(quantidade);
         if (isNaN(qtdNum) || qtdNum <= 0) {
             return res.status(400).json({ mensagem: "Quantidade inválida. Deve ser um número maior que zero." });
         }
 
         try {
-            // 3. Buscar o álbum no banco de dados
-            const album = await db.collection("album").findOne({ _id: ObjectId.createFromHexString(albunsId) });
-            
+            // 3. Buscar o álbum no banco de dados. Mudar de "album" para "albuns" (plural)
+            const album = await db.collection("albuns").findOne({ _id: ObjectId.createFromHexString(albunsId) });
+
             if (!album) {
                 return res.status(404).json({ mensagem: "Álbum não encontrado" });
             }
@@ -54,11 +62,11 @@ class CarrinhoController {
             // 4. Pegar e converter o preço do álbum (de String para Number)
             let precoUnitario: number;
             if (typeof album.preco !== 'string') {
-                 return res.status(400).json({ mensagem: "Formato de preço inválido no banco de dados" });
+                return res.status(400).json({ mensagem: "Formato de preço inválido no banco de dados" });
             }
             // Substitui vírgula por ponto (se houver) e converte para float
             precoUnitario = parseFloat(album.preco.replace(',', '.'));
-            
+
             if (isNaN(precoUnitario)) {
                 return res.status(400).json({ mensagem: "Preço do álbum não é um número válido" });
             }
@@ -176,21 +184,21 @@ class CarrinhoController {
             return res.status(401).json({ mensagem: "Usuário inválido!" });
         }
         const usuarioId = req.usuarioId;
-        
+
         const qtdNum = Number(quantidade);
         if (isNaN(qtdNum) || qtdNum <= 0) {
             // Se a quantidade for zero ou menor, o correto seria remover o item
             return res.status(400).json({ mensagem: "Quantidade deve ser maior que zero. Para remover, use a rota de remoção." });
         }
-        
+
         const carrinho = await db.collection<Carrinho>("carrinhos").findOne({ usuarioId: usuarioId });
-        
+
         if (!carrinho) {
             return res.status(404).json({ mensagem: "Carrinho não encontrado" });
         }
-        
+
         const item = carrinho.itens.find(item => item.albunsId === albunsId);
-        
+
         if (!item) {
             return res.status(404).json({ mensagem: "Item não encontrado no carrinho" });
         }
@@ -217,9 +225,9 @@ class CarrinhoController {
             return res.status(401).json({ mensagem: "Usuário inválido!" });
         }
         const usuarioId = req.usuarioId;
-        
+
         const carrinho = await db.collection<Carrinho>("carrinhos").findOne({ usuarioId: usuarioId });
-        
+
         if (!carrinho) {
             // Retorna um carrinho vazio em vez de 404, o que é uma experiência melhor
             return res.status(200).json({
@@ -229,7 +237,7 @@ class CarrinhoController {
                 dataAtualizacao: new Date()
             });
         }
-        
+
         return res.status(200).json(carrinho);
     }
 
@@ -241,13 +249,13 @@ class CarrinhoController {
             return res.status(401).json({ mensagem: "Usuário inválido!" });
         }
         const usuarioId = req.usuarioId;
-        
+
         const resultado = await db.collection("carrinhos").deleteOne({ usuarioId: usuarioId });
-        
+
         if (resultado.deletedCount === 0) {
             return res.status(404).json({ mensagem: "Carrinho não encontrado" });
         }
-        
+
         return res.status(200).json({ mensagem: "Carrinho removido com sucesso" });
     }
 }
