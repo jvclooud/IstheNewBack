@@ -9,6 +9,9 @@ app.use(cors())
 
 app.use(express.json())
 
+// Servir arquivos estáticos (pasta public) para páginas frontend simples
+app.use(express.static('public'))
+
 
 // Usando as rotas definidas em rotas.ts
 app.use(rotasNaoAutenticadas)
