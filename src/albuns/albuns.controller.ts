@@ -14,6 +14,47 @@ class albunsController {
         const albuns = await db.collection('albuns').find().toArray()
         res.status(200).json(albuns)
     }
+
+    async atualizar(req: Request, res: Response) {
+        const { id } = req.params
+        const { titulo, artista, preco, ano_lancamento, genero } = req.body
+
+        if (!titulo || !artista || !preco || !ano_lancamento || !genero) {
+            return res.status(400).json({ error: "Todos os campos são obrigatórios" })
+        }
+
+        try {
+            const resultado = await db.collection('albuns').updateOne(
+                { _id: new ObjectId(id) },
+                { $set: { titulo, artista, preco, ano_lancamento, genero } }
+            )
+
+            if (resultado.matchedCount === 0) {
+                return res.status(404).json({ error: "Álbum não encontrado" })
+            }
+
+            res.status(200).json({ message: "Álbum atualizado com sucesso" })
+        } catch (error) {
+            res.status(500).json({ error: "Erro ao atualizar o álbum" })
+        }
+    }
+
+    async remover(req: Request, res: Response) {
+        const { id } = req.params
+
+        try {
+            const resultado = await db.collection('albuns').deleteOne({ _id: new ObjectId(id) })
+
+            if (resultado.deletedCount === 0) {
+                return res.status(404).json({ error: "Álbum não encontrado" })
+            }
+
+            res.status(200).json({ message: "Álbum removido com sucesso" })
+        } catch (error) {
+            res.status(500).json({ error: "Erro ao remover o álbum" })
+        }
+    }
 }
 
+import { ObjectId } from 'mongodb'
 export default new albunsController()

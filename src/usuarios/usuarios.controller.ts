@@ -2,21 +2,24 @@ import { Request, Response } from 'express'
 import { db } from '../database/banco-mongo.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+
 class UsuariosController {
     async adicionar(req: Request, res: Response) {
-        const { nome, idade, email, senha } = req.body
+        const { nome, idade, email, senha, role = 'user' } = req.body
         if (!nome || !idade || !email || !senha)
             return res.status(400).json({ error: "Nome, idade, email e senha são obrigatórios" })
         if (senha.length < 6)
             return res.status(400).json({ error: "A senha deve ter no mínimo 6 caracteres" })
         if (!email.includes('@') || !email.includes('.'))
             return res.status(400).json({ error: "Email inválido" })
+        if (role !== 'user' && role !== 'admin')
+            return res.status(400).json({ error: "Role inválida. Deve ser 'user' ou 'admin'" })
 
         const senhaCriptografada = await bcrypt.hash(senha, 10)
-        const usuario = { nome, idade, email, senha: senhaCriptografada }
+        const usuario = { nome, idade, email, senha: senhaCriptografada, role }
 
         const resultado = await db.collection('usuarios').insertOne(usuario)
-        res.status(201).json({nome,idade,email,_id: resultado.insertedId })
+        res.status(201).json({nome, idade, email, role, _id: resultado.insertedId })
     }
     async listar(req: Request, res: Response) {
         const usuarios = await db.collection('usuarios').find().toArray()
@@ -38,8 +41,18 @@ class UsuariosController {
         if(!senhaValida) return res.status(401).json({mensagem:"Senha Incorreta!"})
 
         //Gerar o token
-        const token = jwt.sign({usuarioId: usuario._id}, process.env.JWT_SECRET!, {expiresIn: '1h'})
-        res.status(200).json({token:token})
+        const token = jwt.sign(
+            {
+                usuarioId: usuario._id,
+                role: usuario.role || 'user' // Se não tiver role, assume 'user'
+            }, 
+            process.env.JWT_SECRET!, 
+            {expiresIn: '1h'}
+        )
+        res.status(200).json({
+            token: token,
+            role: usuario.role || 'user'
+        })
     }
 }
 
