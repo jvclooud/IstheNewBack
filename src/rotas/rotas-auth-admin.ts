@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { AdminAuth } from '../middlewares/auth.js'
+import { AdminAuth } from '../middlewares/auth-admin.js'
 import carrinhoController from '../carrinho/carrinho.controller.js'
 import albunsController from '../albuns/albuns.controller.js'
 
@@ -11,6 +11,7 @@ rotas.post('/albuns', albunsController.adicionar)
 rotas.get('/albuns', albunsController.listar)
 rotas.put('/albuns/:id', albunsController.atualizar)
 rotas.delete('/albuns/:id', albunsController.remover)
+rotas.post('/cadastro',albunsController.adicionar)
 
 // Rotas de administração do carrinho
 rotas.post('/adicionarItem', carrinhoController.adicionarItem)

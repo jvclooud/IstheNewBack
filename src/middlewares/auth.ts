@@ -39,4 +39,5 @@ function AdminAuth(req: AutenticacaoRequest, res: Response, next: NextFunction) 
     })
 }
 
-export { Auth, AdminAuth };
+export { Auth }
+export default Auth
