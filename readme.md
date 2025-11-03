@@ -19,3 +19,33 @@ Antes de começar, certifique-se de ter o Node.js e o npm (Node Package Manager)
     npm start
     ```
 6. O servidor de desenvolvimento será iniciado e o projeto estará disponível em [http://localhost:8000](http://localhost:8000) ou na porta que você configurou.
+ 
+ ## Página de produtos (frontend simples)
+
+ Após iniciar o servidor, abra no navegador:
+
+ - Página HTML que lista produtos: http://localhost:8000/produtos.html
+ - Endpoint JSON usado pela página: http://localhost:8000/produtos
+
+ A página tenta mostrar no canto superior direito o nome e o tipo do usuário extraídos do token JWT. Para que apareça, o token deve estar disponível no navegador (a página procura nas seguintes fontes, nessa ordem):
+
+ 1. localStorage (chave: `token`)
+ 2. cookie `token`
+ 3. parâmetro de URL `?token=...`
+
+ O login retorna um token JWT (agora incluindo `nome` e `tipo` no payload). Exemplo de uso via HTTP (PowerShell):
+
+ ```powershell
+ # Fazer login e obter token (substitua email/senha)
+ Invoke-RestMethod -Method Post -Uri 'http://localhost:8000/login' -Body (@{ email='seu@email.com'; senha='suaSenha' } | ConvertTo-Json) -ContentType 'application/json'
+ ```
+
+ Copie o valor do campo `token` retornado e cole no console do navegador para teste:
+
+ ```js
+ // no console do navegador
+ localStorage.setItem('token', '<COLE_AQUI_O_TOKEN>')
+ location.reload()
+ ```
+
+ Observação: ao criar um usuário (rota `/adicionarUsuario`) o campo `tipo` é opcional e por padrão será `cliente`.
