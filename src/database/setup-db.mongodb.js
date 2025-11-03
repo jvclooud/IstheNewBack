@@ -1,5 +1,5 @@
 // Seleciona (ou cria) o banco de dados
-use('isNewTrend');
+use('newtrend');
 
 // Drop das coleções existentes para garantir um estado limpo
 db.usuarios.drop();
