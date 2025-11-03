@@ -4,8 +4,18 @@ import rotasNaoAutenticadas from './rotas/rotas-nao-autenticadas.js'
 import rotasAutenticadas from './rotas/rotas-autenticadas.js'
 import Auth from './middlewares/auth.js'
 import cors from 'cors'
+
+// Configuração inicial do servidor
 const app = express()
 app.use(cors())
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+});
 
 app.use(express.json())
 
