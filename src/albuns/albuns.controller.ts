@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { db } from '../database/banco-mongo.js'
+import { ObjectId } from 'mongodb'
+
 class albunsController {
     async adicionar(req: Request, res: Response) {
         const { titulo, artista, preco, ano_lancamento, genero } = req.body
@@ -56,5 +58,4 @@ class albunsController {
     }
 }
 
-import { ObjectId } from 'mongodb'
 export default new albunsController()

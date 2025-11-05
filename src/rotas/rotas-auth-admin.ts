@@ -14,7 +14,6 @@ rotas.delete('/albuns/:id', albunsController.remover)
 rotas.post('/cadastro',albunsController.adicionar)
 
 // Rotas de administração do carrinho
-rotas.post('/adicionarItem', carrinhoController.adicionarItem)
 rotas.post('/removerItem', carrinhoController.removerItem)
 rotas.get('/carrinho/:usuarioId', carrinhoController.listar)
 rotas.delete('/carrinho/:usuarioId', carrinhoController.remover)

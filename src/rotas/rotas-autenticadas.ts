@@ -9,8 +9,10 @@ rotas.post('/cadastro',albunsController.adicionar)
 
 
 rotas.post('/adicionarItem',carrinhoController.adicionarItem)
-rotas.post('/removerItem',carrinhoController.removerItem)
-rotas.get('/carrinho/:usuarioId',carrinhoController.listar)
-rotas.delete('/carrinho/:usuarioId',carrinhoController.remover)
+rotas.post('/removerItem',carrinhoController.removerItem)   
+
+
+rotas.get('/carrinho',carrinhoController.listar)
+rotas.delete('/carrinho',carrinhoController.remover)
 
 export default rotas
