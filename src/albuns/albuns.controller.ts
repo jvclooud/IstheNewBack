@@ -4,11 +4,11 @@ import { ObjectId } from 'mongodb'
 
 class albunsController {
     async adicionar(req: Request, res: Response) {
-        const { titulo, artista, preco, ano_lancamento, genero } = req.body
+        const { titulo, artista, preco, ano_lancamento, genero, imagem_url } = req.body
         if (!titulo || !artista || !preco || !ano_lancamento || !genero)
             return res.status(400).json({ error: "Título, artista, preço, ano_lancamento e gênero são obrigatórios" })
 
-        const album = { titulo, artista, preco, ano_lancamento, genero }
+        const album = { titulo, artista, preco, ano_lancamento, genero, imagem_url }
         const resultado = await db.collection('albuns').insertOne(album)
         res.status(201).json({ ...album, _id: resultado.insertedId })
     }
