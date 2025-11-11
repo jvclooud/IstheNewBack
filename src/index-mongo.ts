@@ -4,6 +4,7 @@ import rotasNaoAutenticadas from './rotas/rotas-nao-autenticadas.js'
 import rotasAutenticadas from './rotas/rotas-autenticadas.js'
 import Auth from './middlewares/auth.js'
 import cors from 'cors'
+import rotasAuthAdmin from './rotas/rotas-auth-admin.js'
 
 // Configuração inicial do servidor
 const app = express()
@@ -27,6 +28,7 @@ app.use(express.static('public'))
 app.use(rotasNaoAutenticadas)
 app.use(Auth)
 app.use(rotasAutenticadas)
+app.use(rotasAuthAdmin)
 
 // Criando o servidor na porta 8000 com o express
 app.listen(8000, () => {

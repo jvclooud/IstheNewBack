@@ -17,7 +17,7 @@ app.use(express.static('public'))
 app.use(rotasNaoAutenticadas)
 app.use(Auth) // Middleware de autenticação global
 app.use(rotasAutenticadas) // Rotas autenticadas normais
-app.use('/admin', rotasAuthAdmin) // Rotas de administrador
+app.use(rotasAuthAdmin) // Rotas de administrador
 
 // Criando o servidor na porta 8000 com o express
 app.listen(8000, () => {
