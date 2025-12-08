@@ -3,6 +3,8 @@ import {Router} from 'express'
 import carrinhoController from '../carrinho/carrinho.controller.js'
 import albunsController from '../albuns/albuns.controller.js'
 import usuariosController from '../usuarios/usuarios.controller.js'
+import pagamentoController from "../pagamentos/pagamento.controller.js"
+
 
 
 const rotas = Router()
@@ -21,4 +23,6 @@ rotas.get('/carrinho',carrinhoController.listar)
 rotas.delete('/carrinho',carrinhoController.remover)
 
 rotas.post('/login',usuariosController.login)
+rotas.get("/pagamento/total", pagamentoController.obterTotal);
+rotas.post("/criar-pagamento-cartao", pagamentoController.criarPagamento);
 export default rotas
