@@ -21,8 +21,8 @@ rotas.get('/carrinho/:usuarioId', carrinhoController.listar)
 rotas.delete('/carrinho/:usuarioId', carrinhoController.remover)
 
 // Rotas de administração de usuários
-rotas.get('admin/usuarios', usuariosController.listar)
-rotas.delete('/usuarios/:id', usuariosController.deletar)
-rotas.put('/usuarios/:id/promover', usuariosController.promover)
+rotas.get('/admin/usuarios', usuariosController.listar)
+rotas.delete('/admin/usuarios/:id', usuariosController.deletar)
+rotas.put('/admin/usuarios/:id/promover', usuariosController.promover)
 
 export default rotas
