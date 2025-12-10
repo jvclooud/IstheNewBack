@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { AdminAuth } from '../middlewares/auth-admin.js'
 import carrinhoController from '../carrinho/carrinho.controller.js'
 import albunsController from '../albuns/albuns.controller.js'
+import usuariosController from '../usuarios/usuarios.controller.js'
 
 const rotas = Router()
 rotas.use(AdminAuth) // Aplica o middleware de admin em todas as rotas
@@ -18,5 +19,10 @@ rotas.post('/cadastro',albunsController.adicionar)
 rotas.post('/removerItem', carrinhoController.removerItem)
 rotas.get('/carrinho/:usuarioId', carrinhoController.listar)
 rotas.delete('/carrinho/:usuarioId', carrinhoController.remover)
+
+// Rotas de administração de usuários
+rotas.get('admin/usuarios', usuariosController.listar)
+rotas.delete('/usuarios/:id', usuariosController.deletar)
+rotas.put('/usuarios/:id/promover', usuariosController.promover)
 
 export default rotas

@@ -54,6 +54,37 @@ class UsuariosController {
             role: usuario.role || 'user'
         })
     }
+
+    async deletar(req: Request, res: Response) {
+        const { id } = req.params
+        if (!id) return res.status(400).json({ error: "ID do usuário é obrigatório" })
+
+        const { ObjectId } = await import('mongodb')
+        const resultado = await db.collection('usuarios').deleteOne({ _id: new ObjectId(id) })
+
+        if (resultado.deletedCount === 0) {
+            return res.status(404).json({ error: "Usuário não encontrado" })
+        }
+
+        res.status(200).json({ mensagem: "Usuário deletado com sucesso" })
+    }
+
+    async promover(req: Request, res: Response) {
+        const { id } = req.params
+        if (!id) return res.status(400).json({ error: "ID do usuário é obrigatório" })
+
+        const { ObjectId } = await import('mongodb')
+        const resultado = await db.collection('usuarios').updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { role: 'admin' } }
+        )
+
+        if (resultado.matchedCount === 0) {
+            return res.status(404).json({ error: "Usuário não encontrado" })
+        }
+
+        res.status(200).json({ mensagem: "Usuário promovido para admin" })
+    }
 }
 
 export default new UsuariosController()
